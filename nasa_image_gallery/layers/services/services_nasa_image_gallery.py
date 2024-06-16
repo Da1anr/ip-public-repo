@@ -5,10 +5,11 @@ from ..dao import repositories
 from ..generic import mapper
 from django.contrib.auth import get_user
 
-def getAllImages(input=None):
+def getAllImages1(input=None):
     # obtiene un listado de imágenes desde transport.py y lo guarda en un json_collection.
     # ¡OJO! el parámetro 'input' indica si se debe buscar por un valor introducido en el buscador.
-    json_collection = []
+    json_collection = transport.getAllImages(input=None)
+    
 
     images = []
 
@@ -18,7 +19,7 @@ def getAllImages(input=None):
 
 
 def getImagesBySearchInputLike(input):
-    return getAllImages(input)
+    return getAllImages1(input)
 
 
 # añadir favoritos (usado desde el template 'home.html')
