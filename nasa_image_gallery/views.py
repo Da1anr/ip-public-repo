@@ -27,10 +27,11 @@ def getAllImagesAndFavouriteList(query):
 # función principal de la galería.
 def home(request):
     # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
-    # (*) este último, solo si se desarrolló el opcional de favoritos; caso contrario, será un listado vacío [].
-    images = []
-    favourite_list = []
-    return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list} )
+    # (*) este último, solo si se desarrolló es opcional de favoritos; caso contrario, será un listado vacío [].
+    predeterminado="space"
+
+    mappedImages, favourite_list = getAllImagesAndFavouriteList(predeterminado)
+    return render(request, 'home.html', {'images': mappedImages, 'favourite_list': favourite_list} )
 
 
 # función utilizada en el buscador..
