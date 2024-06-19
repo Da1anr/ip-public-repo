@@ -1,3 +1,46 @@
+{% extends 'header.html' %} {% block content %}
+<main>
+    <h1 class="text-center">Galería de Imágenes de la NASA</h1>
+    <div class="d-flex justify-content-center" style="margin-bottom: 1%">
+        <!-- Buscador del sitio -->
+        <form class="d-flex" action="{% url 'buscar' %}" method="POST">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" name="query" placeholder="Escribí una palabra" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+    </div>
+
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for imagen in images %}
+        <div class="col">
+            <div class="card">
+                <img src="{{ imagen.image_url}}" class="card-img-top" alt="imagen">
+                <div class="card-body">
+                    <h5 class="card-title">{{ imagen.title}}</h5>
+                    <p class="card-text">{{ imagen.description}}</p>
+                </div>
+                {% if request.user.is_authenticated %}
+                <div class="card-footer text-center">
+                    <form method="post" action="{% url 'agregar-favorito' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="title" value="{{ imagen.title }}">
+                        <input type="hidden" name="description" value="{{ imagen.description }}">
+                        <input type="hidden" name="image_url" value="{{ imagen.image_url }}">
+                        <input type="hidden" name="date" value="{{ imagen.date }}"> {% if imagen in favourite_list %}
+                        <button type="submit" class="btn btn-primary btn-sm float-left" style="color:white" disabled>✔️ Ya está añadida a favoritos</button> {% else %}
+                        <button type="submit" class="btn btn-primary btn-sm float-left" style="color:white">❤️ Añadir a favoritos</button> {% endif %}
+
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
+
 <div class="image-gallery">
     {% for image in images %}
        <div class="image-item">
@@ -10,7 +53,7 @@
 
 <style>
 .image-gallery {
-    display: grid;
+    display: grid; /* presenta las imagenes en modo grilla */
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
@@ -22,12 +65,12 @@
 }
 .image {
     width: 100%;
-    max-width: 300px; /* Establece un tamaño máximo para las imágenes */
+    max-width: 400px; /* Tamaño de las imagenes */
     height: auto;
-    border-radius: 8px;
+    border-radius: 8px; /* borde redondeado */
 }
 .image-title, .image-description {
-    max-width: 300px; /* Ajusta el ancho del texto al de la imagen */
+    max-width: 400px; /* Ajusta el ancho del texto al de la imagen */
     width: 100%;
 }
 .image-title {
@@ -36,6 +79,6 @@
 }
 .image-description {
     font-size: 1rem;
-    color: #555;
+    color: #000000; /* selecciona el color del texto/
 }
 </style>
