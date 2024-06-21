@@ -38,7 +38,10 @@ def home(request):
 def search(request):
     search_msg = request.POST.get('query', '')
     #agregar un if para que filtre cuando no hay busqueda
-    mappedImages, favourite_list = getAllImagesAndFavouriteList(search_msg)
+    if not search_msg:
+        mappedImages, favourite_list = getAllImagesAndFavouriteList("space")
+    else:
+        mappedImages, favourite_list = getAllImagesAndFavouriteList(search_msg)
 
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
     return render(request, 'searchResults.html', {'images': mappedImages, 'favourite_list': favourite_list} )
