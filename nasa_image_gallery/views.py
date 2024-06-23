@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .layers.transport import transport
 from .layers.generic import mapper
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
 
 # función que invoca al template del índice de la aplicación.
@@ -29,6 +31,7 @@ def home(request):
     # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
     # (*) este último, solo si se desarrolló es opcional de favoritos; caso contrario, será un listado vacío [].
     predeterminado="space"
+    
 
     mappedImages, favourite_list = getAllImagesAndFavouriteList(predeterminado)
     return render(request, 'home.html', {'images': mappedImages, 'favourite_list': favourite_list} )
@@ -42,9 +45,14 @@ def search(request):
         mappedImages, favourite_list = getAllImagesAndFavouriteList("space")
     else:
         mappedImages, favourite_list = getAllImagesAndFavouriteList(search_msg)
-
+    
+    paginator=Paginator(mappedImages, 8)
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)
+    
+        
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
-    return render(request, 'searchResults.html', {'images': mappedImages, 'favourite_list': favourite_list} )
+    return render(request, 'searchResults.html', {'images': page_obj, 'favourite_list': favourite_list} )
 
 
 # las siguientes funciones se utilizan para implementar la sección de favoritos: traer los favoritos de un usuario, guardarlos, eliminarlos y desloguearse de la app.
