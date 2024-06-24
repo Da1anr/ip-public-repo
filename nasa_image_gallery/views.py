@@ -46,7 +46,7 @@ def search(request):
     else:
         mappedImages, favourite_list = getAllImagesAndFavouriteList(search_msg)
     
-    paginator=Paginator(mappedImages, 8)
+    paginator=Paginator(mappedImages, 6)
     page_number = request.GET.get('page')  
     page_obj = paginator.get_page(page_number)
     
