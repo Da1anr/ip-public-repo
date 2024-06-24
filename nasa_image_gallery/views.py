@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .layers.transport import transport
 from .layers.generic import mapper
+from googletrans import Translator
 
 
 # función que invoca al template del índice de la aplicación.
@@ -33,15 +34,21 @@ def home(request):
     mappedImages, favourite_list = getAllImagesAndFavouriteList(predeterminado)
     return render(request, 'home.html', {'images': mappedImages, 'favourite_list': favourite_list} )
 
-
+    
 # función utilizada en el buscador..
 def search(request):
+    translator = Translator()
     search_msg = request.POST.get('query', '')
     #agregar un if para que filtre cuando no hay busqueda
-    if not search_msg:
-        mappedImages, favourite_list = getAllImagesAndFavouriteList("space")
+    if search_msg:
+        try:
+            translated_search_msg = translator.translate(search_msg, src = "es", dest='en').text # Momentaneamente el source en español, traducción al inglés.
+        except Exception as e:
+            print(f"Error translating search query: {e}") 
+            translated_search_msg = search_msg    # Si no puede traducir, lo devuelve al mensaje original.
+        mappedImages, favourite_list = getAllImagesAndFavouriteList(translated_search_msg)
     else:
-        mappedImages, favourite_list = getAllImagesAndFavouriteList(search_msg)
+        mappedImages, favourite_list = getAllImagesAndFavouriteList("space")
 
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
     return render(request, 'searchResults.html', {'images': mappedImages, 'favourite_list': favourite_list} )
