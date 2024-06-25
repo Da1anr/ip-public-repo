@@ -1,4 +1,6 @@
-{% extends 'header.html' %} {% block content %}
+{% extends 'header.html' %}
+
+{% block content %}
 <main>
     <h1 class="text-center">Galería de Imágenes de la NASA</h1>
     <div class="d-flex justify-content-center" style="margin-bottom: 1%">
@@ -10,15 +12,14 @@
         </form>
     </div>
 
-
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for imagen in images %}
         <div class="col">
             <div class="card">
-                <img src="{{ imagen.image_url}}" class="card-img-top" alt="imagen">
+                <img src="{{ imagen.image_url }}" class="card-img-top" alt="imagen">
                 <div class="card-body">
-                    <h5 class="card-title">{{ imagen.title}}</h5>
-                    <p class="card-text">{{ imagen.description}}</p>
+                    <h5 class="card-title">{{ imagen.title }}</h5>
+                    <p class="card-text">{{ imagen.description }}</p>
                 </div>
                 {% if request.user.is_authenticated %}
                 <div class="card-footer text-center">
@@ -27,10 +28,12 @@
                         <input type="hidden" name="title" value="{{ imagen.title }}">
                         <input type="hidden" name="description" value="{{ imagen.description }}">
                         <input type="hidden" name="image_url" value="{{ imagen.image_url }}">
-                        <input type="hidden" name="date" value="{{ imagen.date }}"> {% if imagen in favourite_list %}
-                        <button type="submit" class="btn btn-primary btn-sm float-left" style="color:white" disabled>✔️ Ya está añadida a favoritos</button> {% else %}
-                        <button type="submit" class="btn btn-primary btn-sm float-left" style="color:white">❤️ Añadir a favoritos</button> {% endif %}
-
+                        <input type="hidden" name="date" value="{{ imagen.date }}">
+                        {% if imagen in favourite_list %}
+                        <button type="submit" class="btn btn-primary btn-sm float-left" style="color:white" disabled>✔️ Ya está añadida a favoritos</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary btn-sm float-left" style="color:white">❤️ Añadir a favoritos</button>
+                        {% endif %}
                     </form>
                 </div>
                 {% endif %}
@@ -38,24 +41,38 @@
         </div>
         {% endfor %}
     </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if images.has_previous %}
+                <a href="?page=1">&laquo; Primero</a>
+                <a href="?page={{ images.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ images.number }} de {{ images.paginator.num_pages }}.
+            </span>
+
+            {% if images.has_next %}
+                <a href="?page={{ images.next_page_number }}">Siguiente</a>
+                <a href="?page={{ images.paginator.num_pages }}">Último &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </main>
 {% endblock %}
 
-<div class="image-gallery">
-    {% for image in images %}
-       <div class="image-item">
-           <img src="{{ image.image_url }}" alt="{{ image.title }}" loading="lazy" class="image">
-           <h4 class="image-title">{{ image.title }}</h4>
-           <span class="image-description">{{ image.description }}</span>
-       </div>
-    {% endfor %}
-</div>
+
+
 
 <style>
+
+
 .image-gallery {
-    display: grid; /* presenta las imagenes en modo grilla */
+    display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    /*padding-bottom: 40px */
 }
 .image-item {
     display: flex;
@@ -65,20 +82,42 @@
 }
 .image {
     width: 100%;
-    max-width: 400px; /* Tamaño de las imagenes */
+    max-width: 400px;
     height: auto;
-    border-radius: 8px; /* borde redondeado */
+    border-radius: 20px;
 }
 .image-title, .image-description {
-    max-width: 400px; /* Ajusta el ancho del texto al de la imagen */
+    max-width: 400px;
     width: 100%;
-}
-.image-title {
     margin: 0.5rem 0 0.25rem;
     font-size: 1.2rem;
 }
 .image-description {
     font-size: 1rem;
-    color: #000000; /* selecciona el color del texto */
+    color: #000000;
+
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.step-links a, .step-links span {
+    margin: 0 5px;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.step-links a:hover {
+    background-color: #ddd;
+    color: #007bff;
+}
+.step-links .current {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+    border-radius: 5px;
 }
 </style>
