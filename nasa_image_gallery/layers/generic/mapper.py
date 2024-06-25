@@ -1,5 +1,5 @@
 # mapper: se refiere a un componente o conjunto de funciones que se utiliza para convertir o "mapear" datos de un formato o estructura a otro. Esta conversión se realiza típicamente cuando se trabaja con diferentes capas de una aplicación, como por ejemplo, entre la capa de datos y la capa de presentación, o entre dos modelos de datos diferentes, mejorando la coherencia y eficiencia.
-
+from googletrans import Translator
 from nasa_image_gallery.layers.generic.nasa_card import NASACard
 
 # usado cuando la info. viene de la API de la nasa, para transformarlo en una NASACard.
@@ -12,6 +12,28 @@ def fromRequestIntoNASACard(object):
                 )
 
     return nasa_card
+
+# Funcion del request a NASACard modificada para traducir titulo y descripción del inglés al español.
+
+# def fromRequestIntoNASACard(object):
+#     translator = Translator()
+    
+#     try:
+#         translated_title = translator.translate(object['data'][0]['title'], src='en', dest='es').text
+#         translated_description = translator.translate(object['data'][0]['description'], src='en', dest='es').text
+#     except Exception as e:
+#         print(f"Error translating title or description: {e}")
+#         translated_title = object['data'][0]['title']
+#         translated_description = object['data'][0]['description']
+
+#     nasa_card = NASACard(
+#         title=translated_title,
+#         description=translated_description,
+#         image_url=object['links'][0]['href'],
+#         date=object['data'][0]['date_created'][:10]
+#     )
+
+#     return nasa_card
 
 
 # usado cuando la info. viene del template, para transformarlo en una NASACard antes de guardarlo en la base de datos.
