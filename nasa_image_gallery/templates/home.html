@@ -39,6 +39,37 @@
         {% endfor %}
     </div>
 </main>
+<div>
+    <br>
+    </br>
+</div>
+    <!-- Controles de paginación -->
+<div class="pagination" style="text-align: center; margin: 20px 0;">
+    <span class="step-links" style="display: inline-block;">
+        {% if images.has_previous %}
+            <a href="?page=1" style="margin-right: 5px; text-decoration: none; color: #007bff;">&laquo; Primero</a>
+            <a href="?page={{ images.previous_page_number }}" style="margin-right: 5px; text-decoration: none; color: #007bff;">Anterior</a>
+        {% endif %}
+
+        <span class="current" style="margin: 0 10px; color: #555;">
+            Página {{ images.number }} de {{ images.paginator.num_pages }}.
+        </span>
+
+        {% if images.has_next %}
+            <a href="?page={{ images.next_page_number }}" style="margin-left: 5px; text-decoration: none; color: #007bff;">Siguiente</a>
+            <a href="?page={{ images.paginator.num_pages }}" style="margin-left: 5px; text-decoration: none; color: #007bff;">Último &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<!--Estos espacios se agregaron para que el footer no tape los controles de paginación  -->
+<div> 
+    <br>
+    </br>
+    <br>
+    </br>
+    <br>
+    </br>
+</div>
+</main>
 
 {% endblock %}
-

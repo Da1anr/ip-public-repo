@@ -61,7 +61,7 @@ def search(request):
     page_obj = paginator.get_page(page_number)
             
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
-    return render(request, 'searchResults.html', {'images': page_obj, 'favourite_list': favourite_list} )
+    return render(request, 'home.html', {'images': page_obj, 'favourite_list': favourite_list} )
 
 def login_view(request):
     if request.method == 'POST':
