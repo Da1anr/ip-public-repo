@@ -36,10 +36,13 @@ def home(request):
     # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
     # (*) este último, solo si se desarrolló es opcional de favoritos; caso contrario, será un listado vacío [].
     predeterminado="space"
-    
 
     mappedImages, favourite_list = getAllImagesAndFavouriteList(predeterminado)
-    return render(request, 'home.html', {'images': mappedImages, 'favourite_list': favourite_list} )
+    print(len(mappedImages))
+    paginator=Paginator(mappedImages, 6)
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'home.html', {'images': page_obj, 'favourite_list': favourite_list} )
 
     
 # función utilizada en el buscador..

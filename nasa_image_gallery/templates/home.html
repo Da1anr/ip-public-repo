@@ -40,22 +40,30 @@
     </div>
 
 
-    <div class="pagination">
-        <span class="step-links">
+    <div class="pagination" style="text-align: center; margin: 20px 0;">
+        <span class="step-links" style="display: inline-block;">
             {% if images.has_previous %}
-                <a href="?page=1">&laquo; Primero</a>
-                <a href="?page={{ images.previous_page_number }}">Anterior</a>
+                <a href="?page=1" style="margin-right: 5px; text-decoration: none; color: #007bff;">&laquo; Primero</a>
+                <a href="?page={{ images.previous_page_number }}" style="margin-right: 5px; text-decoration: none; color: #007bff;">Anterior</a>
             {% endif %}
-
-            <span class="current">
+    
+            <span class="current" style="margin: 0 10px; color: #555;">
                 Página {{ images.number }} de {{ images.paginator.num_pages }}.
             </span>
-
+    
             {% if images.has_next %}
-                <a href="?page={{ images.next_page_number }}">Siguiente</a>
-                <a href="?page={{ images.paginator.num_pages }}">Último &raquo;</a>
+                <a href="?page={{ images.next_page_number }}" style="margin-left: 5px; text-decoration: none; color: #007bff;">Siguiente</a>
+                <a href="?page={{ images.paginator.num_pages }}" style="margin-left: 5px; text-decoration: none; color: #007bff;">Último &raquo;</a>
             {% endif %}
         </span>
+    </div>
+    <div>
+        <br>
+        </br>
+        <br>
+        </br>
+        <br>
+        </br>
     </div>
 </main>
 {% endblock %}
@@ -64,41 +72,12 @@
 
 
 <style>
-.image-gallery {
-display: grid;
-gap: 1rem;
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-/*padding-bottom: 40px */
-}
-.image-item {
-display: flex;
-flex-direction: column;
-align-items: center;
-text-align: center;
-}
-.image {
-width: 100%;
-max-width: 400px;
-height: auto;
-border-radius: 12px;
-}
-.image-title, .image-description {
-max-width: 400px;
-width: 100%;
-}
-.image-title {
-margin: 0.5rem 0 0.25rem;
-font-size: 1.2rem;
-}
-.image-description {
-font-size: 1rem;
-color: #000000;
 
-}
 .pagination {
-display: flex;
-justify-content: center;
-margin-top: 20px;
+    display: flex;
+    margin-top: 15px;
+    align-items: center;
+    justify-content: center;
 }
 .step-links a, .step-links span {
 margin: 0 5px;
