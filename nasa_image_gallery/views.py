@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .layers.transport import transport
 from .layers.generic import mapper
-from googletrans import Translator
+from googletrans import Translator #requiere instalar la dependencia "pip install googletrans==3.1.0a0"
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
@@ -53,7 +53,8 @@ def search(request):
             translated_search_msg = search_msg    # Si no puede traducir, lo devuelve al mensaje original.
         mappedImages, favourite_list = getAllImagesAndFavouriteList(translated_search_msg)
     
-    paginator=Paginator(mappedImages, 6)
+    #paginacion de django en resultados de busqueda.
+    paginator=Paginator(mappedImages, 6) #6 es la cantidad de resultados en pantalla.
     page_number = request.GET.get('page')  
     page_obj = paginator.get_page(page_number)
             

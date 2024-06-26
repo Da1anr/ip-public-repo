@@ -5,6 +5,7 @@ from ..dao import repositories
 from ..generic import mapper
 from django.contrib.auth import get_user
 
+#se borró la funcion getAllImages(): ya que estaba definida en transport.py
 
 def getImagesBySearchInputLike(input):
     return 
