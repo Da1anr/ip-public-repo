@@ -35,35 +35,33 @@ def getAllImagesAndFavouriteList(query):
 def home(request):
     # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
     # (*) este último, solo si se desarrolló es opcional de favoritos; caso contrario, será un listado vacío [].
-    predeterminado="space"
-    
-
+    predeterminado="space" #en la pantalla de galería, se mostrará el resulado de "space" de forma predeterminada.
     mappedImages, favourite_list = getAllImagesAndFavouriteList(predeterminado)
     return render(request, 'home.html', {'images': mappedImages, 'favourite_list': favourite_list} )
 
     
-# función utilizada en el buscador..
+# función utilizada en el buscador.
 def search(request):
     translator = Translator()
     search_msg = request.POST.get('query', '')
-    #agregar un if para que filtre cuando no hay busqueda
+    #agregar un if para que filtre cuando no hay busqueda. No el usuario no ingresa palabra de busqueda, tomará space como valor predeterminado. 
     if not search_msg:
         mappedImages, favourite_list = getAllImagesAndFavouriteList("space")
     else:
         try:
-            translated_search_msg = translator.translate(search_msg, src = "es", dest='en').text # Momentaneamente el source en español, traducción al inglés.
+            translated_search_msg = translator.translate(search_msg, src = "es", dest='en').text # Momentaneamente traduce de español a inglés.
         except Exception as e:
             print(f"Error translating search query: {e}") 
             translated_search_msg = search_msg    # Si no puede traducir, lo devuelve al mensaje original.
         mappedImages, favourite_list = getAllImagesAndFavouriteList(translated_search_msg)
     
     #paginacion de django en resultados de busqueda.
-    paginator=Paginator(mappedImages, 6)
+    paginator=Paginator(mappedImages, 6) # El numero de la función es la cantidad de elementos mostrados en pantalla. 
     page_number = request.GET.get('page')  
     page_obj = paginator.get_page(page_number)
             
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
-    return render(request, 'home.html', {'images': page_obj, 'favourite_list': favourite_list} )
+    return render(request, 'searchResults.html', {'images': page_obj, 'favourite_list': favourite_list} )
 
 def login_view(request):
     if request.method == 'POST':
