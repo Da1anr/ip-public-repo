@@ -8,8 +8,8 @@ from django.contrib.auth import logout
 from .layers.transport import transport
 from .layers.generic import mapper
 from googletrans import Translator #requiere instalar la dependencia "pip install googletrans==3.1.0a0"
-from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.core.paginator import Paginator #para la paginación
+from django.shortcuts import render #para la paginación
 from django.urls import path
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -37,7 +37,10 @@ def home(request):
     # (*) este último, solo si se desarrolló es opcional de favoritos; caso contrario, será un listado vacío [].
     predeterminado="space" #en la pantalla de galería, se mostrará el resulado de "space" de forma predeterminada.
     mappedImages, favourite_list = getAllImagesAndFavouriteList(predeterminado)
-    return render(request, 'home.html', {'images': mappedImages, 'favourite_list': favourite_list} )
+    paginator=Paginator(mappedImages, 6) # El numero de la función es la cantidad de elementos mostrados en pantalla. 
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'home.html', {'images': page_obj, 'favourite_list': favourite_list} )
 
     
 # función utilizada en el buscador.
