@@ -10,6 +10,10 @@ from .layers.generic import mapper
 from googletrans import Translator #requiere instalar la dependencia "pip install googletrans==3.1.0a0"
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.urls import path
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 
 # función que invoca al template del índice de la aplicación.
@@ -54,18 +58,37 @@ def search(request):
         mappedImages, favourite_list = getAllImagesAndFavouriteList(translated_search_msg)
     
     #paginacion de django en resultados de busqueda.
-    paginator=Paginator(mappedImages, 6) #6 es la cantidad de resultados en pantalla.
+    paginator=Paginator(mappedImages, 6)
     page_number = request.GET.get('page')  
     page_obj = paginator.get_page(page_number)
             
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
-    return render(request, 'searchResults.html', {'images': page_obj, 'favourite_list': favourite_list} )
+    return render(request, 'home.html', {'images': page_obj, 'favourite_list': favourite_list} )
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            # Redirige a la página de inicio después del login
+            return redirect('home')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos, intente nuevamente.')
+
+    return render(request, 'registration/login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
 
 # las siguientes funciones se utilizan para implementar la sección de favoritos: traer los favoritos de un usuario, guardarlos, eliminarlos y desloguearse de la app.
 @login_required
 def getAllFavouritesByUser(request):
     favourite_list = []
+    
     return render(request, 'favourites.html', {'favourite_list': favourite_list})
 
 
